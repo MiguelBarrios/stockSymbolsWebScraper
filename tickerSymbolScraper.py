@@ -1,8 +1,9 @@
+import requests
 from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
-import requests
+from tqdm import tqdm
 
 def saveSymbolsByExchange(exchange, outputFileName):
 	exchange = exchange.lower()
@@ -15,8 +16,7 @@ def saveSymbolsByExchange(exchange, outputFileName):
 	f = open(outputFileName, 'a')
 
 	symbols = "ABCDEFGHIJKLMNOPQUSTUVWXYZ+"
-	for c in symbols:
-		print('.', end='', flush=True) #For the user
+	for c in tqdm(symbols):
 		curUrl = url.format(letter = c)
 		data = requests.get(curUrl)
 		raw_html = data.text
@@ -31,5 +31,5 @@ def saveSymbolsByExchange(exchange, outputFileName):
 				f.write("\n")
 	f.close()
 
-saveSymbolsByExchange("nasdaq", "test1.txt")
-saveSymbolsByExchange("nyse", "test2.txt")
+saveSymbolsByExchange("nasdaq", "nasdaq.txt")
+saveSymbolsByExchange("nyse", "nyse.txt")
