@@ -4,16 +4,19 @@ from contextlib import closing
 from bs4 import BeautifulSoup
 import requests
 
-def my_function(exchange, outputFileName):
+def saveSymbolsByExchange(exchange, outputFileName):
+	exchange = exchange.lower()
 	exchanges = {
 	"nyse":'https://www.advfn.com/nyse/newyorkstockexchange.asp?companies={letter}',
-	"nasdaq": "https://www.advfn.com/nasdaq/nasdaq.asp?companies={letter}"}
+	"nasdaq": "https://www.advfn.com/nasdaq/nasdaq.asp?companies={letter}",
+	"amex": "https://www.advfn.com/amex/americanstockexchange.asp?companies={letter}"}
 
 	url = exchanges.get(exchange)
 	f = open(outputFileName, 'a')
 
 	symbols = "ABCDEFGHIJKLMNOPQUSTUVWXYZ+"
 	for c in symbols:
+		print('.', end='', flush=True) #For the user
 		curUrl = url.format(letter = c)
 		data = requests.get(curUrl)
 		raw_html = data.text
@@ -28,6 +31,5 @@ def my_function(exchange, outputFileName):
 				f.write("\n")
 	f.close()
 
-my_function("nasdaq", "nasdaqSymbols.txt")
-
-
+saveSymbolsByExchange("nasdaq", "test1.txt")
+saveSymbolsByExchange("nyse", "test2.txt")
